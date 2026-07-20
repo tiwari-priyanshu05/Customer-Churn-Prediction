@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Predictor & Analytics Portal</title>
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Interactive 3D Perspective Grid Background -->
+    <div class="grid-3d-container">
+        <div class="grid-3d-floor"></div>
+    </div>
+    
+    <!-- 3D Floating Particle Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    
+    <!-- Decorative Large Blurred Background Glows -->
+    <div class="blob blob-purple"></div>
+    <div class="blob blob-blue"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <svg class="logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="url(#logo-grad)"/>
+                    <defs>
+                        <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#a78bfa"/>
+                            <stop offset="1" stop-color="#6c5ce7"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>ChurnPredict <span class="badge">Enterprise ML 2.0</span></h1>
+            </div>
+            <p class="subtitle">Predict exit risk, analyze customer behaviors, and simulate retention strategies using advanced machine learning models.</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="app-tabs">
+            <button class="tab-btn active" id="tab-single-btn" onclick="switchTab('single')">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Customer Profile Analysis
+            </button>
+            <button class="tab-btn" id="tab-batch-btn" onclick="switchTab('batch')">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Batch CSV Scoring
+            </button>
+            <button class="tab-btn" id="tab-sandbox-btn" onclick="switchTab('sandbox')">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+                Model Sandbox & Insights
+            </button>
+        </nav>
+
+        <main class="app-main">
+            <!-- TAB 1: SINGLE PREDICTION -->
+            <section id="tab-single" class="tab-content active">
+                <div class="card form-card">
+                    <div class="card-header">
+                        <h2>Customer Profile Parameters</h2>
+                        <p class="card-desc">Configure account specifications to trigger the Random Forest classifier engine.</p>
+                    </div>
+                    
+                    <form id="single-predict-form" onsubmit="handleSinglePredict(event)">
+                        <div class="form-grid">
+                            <!-- Column 1: Demographics -->
+                            <div class="form-col">
+                                <div class="col-title">
+                                    <svg class="col-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                    <h3>Demographics</h3>
+                                </div>
+                                <div class="form-group">
+                                    <div class="label-row">
+                                        <label for="age">Age</label>
+                                        <span class="val-display" id="age-val">38</span>
+                                    </div>
+                                    <input type="range" id="age" name="Age" min="18" max="100" value="38" class="slider" oninput="updateFormLabels()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender">Gender</label>
+                                    <div class="select-wrapper">
+                                        <select id="gender" name="Gender" required>
+                                            <option value="Female">Female</option>
+                                            <option value="Male" selected>Male</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="geography">Geography</label>
+                                    <div class="select-wrapper">
+                                        <select id="geography" name="Geography" required>
+                                            <option value="France" selected>France</option>
+                                            <option value="Germany">Germany</option>
+                                            <option value="Spain">Spain</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 2: Financial -->
+                            <div class="form-col">
+                                <div class="col-title">
+                                    <svg class="col-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                    <h3>Financial Status</h3>
+                                </div>
+                                <div class="form-group">
+                                    <div class="label-row">
+                                        <label for="credit_score">Credit Score</label>
+                                        <span class="val-display" id="credit_score-val">650</span>
+                                    </div>
+                                    <input type="range" id="credit_score" name="CreditScore" min="350" max="850" value="650" class="slider" oninput="updateFormLabels()">
+                                </div>
+                                <div class="form-group">
+                                    <div class="label-row">
+                                        <label for="balance">Account Balance</label>
+                                        <span class="val-display" id="balance-val">$75,000</span>
+                                    </div>
+                                    <input type="range" id="balance" name="Balance" min="0" max="250000" value="75000" step="1000" class="slider" oninput="updateFormLabels()">
+                                </div>
+                                <div class="form-group">
+                                    <div class="label-row">
+                                        <label for="estimated_salary">Estimated Salary</label>
+                                        <span class="val-display" id="estimated_salary-val">$90,000</span>
+                                    </div>
+                                    <input type="range" id="estimated_salary" name="EstimatedSalary" min="0" max="250000" value="90000" step="1000" class="slider" oninput="updateFormLabels()">
+                                </div>
+                            </div>
+
+                            <!-- Column 3: Account Activity -->
+                            <div class="form-col">
+                                <div class="col-title">
+                                    <svg class="col-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                    <h3>Account Activity</h3>
+                                </div>
+                                <div class="form-group">
+                                    <label for="num_products">Number of Products</label>
+                                    <div class="select-wrapper">
+                                        <select id="num_products" name="NumOfProducts" required>
+                                            <option value="1" selected>1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="label-row">
+                                        <label for="tenure">Tenure</label>
+                                        <span class="val-display" id="tenure-val">5 Years</span>
+                                    </div>
+                                    <input type="range" id="tenure" name="Tenure" min="0" max="10" value="5" class="slider" oninput="updateFormLabels()">
+                                </div>
+                                <div class="checkbox-row-container">
+                                    <div class="checkbox-group card-checkbox">
+                                        <input type="checkbox" id="has_cr_card" name="HasCrCard" checked>
+                                        <label for="has_cr_card">Has Credit Card</label>
+                                    </div>
+                                    <div class="checkbox-group card-checkbox">
+                                        <input type="checkbox" id="is_active" name="IsActiveMember" checked>
+                                        <label for="is_active">Is Active Member</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block btn-glow">🚀 Run Churn Analysis</button>
+                    </form>
+                </div>
+
+                <!-- Results Output -->
+                <div class="card result-card hidden" id="single-result-card">
+                    <div class="card-header border-bottom-0">
+                        <h2>Prediction Verdict</h2>
+                        <p class="card-desc">Diagnostic insights generated by the model analysis.</p>
+                    </div>
+                    <div class="result-grid">
+                        <!-- Left Panel: Meter Gauge -->
+                        <div class="result-col-gauge">
+                            <div class="gauge-wrapper">
+                                <div class="gauge-circle">
+                                    <div class="gauge-track-background"></div>
+                                    <svg viewBox="0 0 100 100">
+                                        <circle cx="50" cy="50" r="44" class="gauge-bg"></circle>
+                                        <circle cx="50" cy="50" r="44" class="gauge-fill" id="gauge-fill-arc"></circle>
+                                    </svg>
+                                    <div class="gauge-inner">
+                                        <span class="gauge-label">CHURN RISK</span>
+                                        <span class="gauge-value" id="gauge-risk-val">0.0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Panel: Text Verdict and Indicators -->
+                        <div class="result-col-verdict">
+                            <div class="verdict-banner" id="verdict-status-banner">
+                                <div class="verdict-icon-container" id="verdict-icon-svg"></div>
+                                <div class="verdict-text-container">
+                                    <h3 id="verdict-title">Low Churn Risk</h3>
+                                    <p id="verdict-desc">The customer profile exhibits high stability.</p>
+                                </div>
+                            </div>
+
+                            <div class="insights-container">
+                                <h3>💡 Key Risk Indicators</h3>
+                                <ul class="indicators-list" id="risk-factors-list">
+                                    <!-- Populated by JS -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations System -->
+                    <div class="recs-wrapper">
+                        <h3>📋 Actionable Retention Strategy</h3>
+                        <div class="recs-list" id="recs-list-container">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: BATCH CSV ANALYSIS -->
+            <section id="tab-batch" class="tab-content">
+                <div class="card batch-card">
+                    <div class="card-header">
+                        <h2>Bulk Customer Upload</h2>
+                        <p class="card-desc">Process and score entire customer segments instantly. Upload a CSV file below.</p>
+                    </div>
+                    
+                    <div class="batch-split">
+                        <!-- Uploader -->
+                        <div class="upload-zone" id="drop-zone" onclick="triggerFileInput()">
+                            <div class="upload-pulse-ring">
+                                <svg class="upload-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                            </div>
+                            <p class="upload-text">Drag & drop your CSV template here or <span class="highlight">browse files</span></p>
+                            <input type="file" id="batch-file-input" style="display:none;" accept=".csv" onchange="handleFileSelected(event)">
+                            <div class="selected-file-name hidden" id="selected-file-label"></div>
+                        </div>
+                        
+                        <!-- Utility buttons -->
+                        <div class="upload-actions">
+                            <button class="btn btn-secondary btn-block" onclick="downloadCSVTemplate()">
+                                <svg class="btn-icon-inside" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Download Template
+                            </button>
+                            <button class="btn btn-primary btn-block btn-glow" id="btn-process-batch" onclick="processBatchFile()" disabled>
+                                <svg class="btn-icon-inside" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                Process Bulk File
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Batch Results -->
+                <div class="batch-results-area hidden" id="batch-results-wrapper">
+                    <!-- KPI Metric Cards Grid -->
+                    <div class="kpi-grid">
+                        <div class="card kpi-card">
+                            <span class="kpi-title">Total Customers</span>
+                            <span class="kpi-value" id="kpi-total">0</span>
+                            <div class="kpi-bar kpi-bar-purple"></div>
+                        </div>
+                        <div class="card kpi-card">
+                            <span class="kpi-title">Predicted Churns</span>
+                            <span class="kpi-value" id="kpi-churns">0</span>
+                            <div class="kpi-bar kpi-bar-red"></div>
+                        </div>
+                        <div class="card kpi-card">
+                            <span class="kpi-title">Avg Churn Rate</span>
+                            <span class="kpi-value" id="kpi-rate">0.0%</span>
+                            <div class="kpi-bar kpi-bar-blue"></div>
+                        </div>
+                        <div class="card kpi-card alert-card">
+                            <span class="kpi-title">High Risk Alerts</span>
+                            <span class="kpi-value" id="kpi-high-risk" style="color: #ef4444;">0</span>
+                            <div class="kpi-bar kpi-bar-orange"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Analysis -->
+                    <div class="batch-charts-grid">
+                        <div class="card chart-card">
+                            <h3>Average Churn Probability by Country</h3>
+                            <div class="chart-container">
+                                <canvas id="chart-country"></canvas>
+                            </div>
+                        </div>
+                        <div class="card chart-card">
+                            <h3>Average Churn Probability by Age Group</h3>
+                            <div class="chart-container">
+                                <canvas id="chart-age"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Sheet Preview -->
+                    <div class="card preview-card">
+                        <div class="card-header-actions">
+                            <div>
+                                <h2>Scored Customers List</h2>
+                                <p class="card-desc" style="margin-bottom:0; margin-top:0.25rem;">Preview of top 100 rows containing risk parameters and classifications.</p>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" id="btn-download-results" onclick="downloadScoredCSV()">📥 Export Full Scored CSV</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table" id="batch-table">
+                                <thead>
+                                    <tr>
+                                        <th>Credit Score</th>
+                                        <th>Geography</th>
+                                        <th>Gender</th>
+                                        <th>Age</th>
+                                        <th>Tenure</th>
+                                        <th>Balance</th>
+                                        <th>Products</th>
+                                        <th>Active Member</th>
+                                        <th>Churn Probability</th>
+                                        <th>Risk Tier</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: MODEL INSIGHTS & SIMULATOR -->
+            <section id="tab-sandbox" class="tab-content">
+                <div class="sandbox-grid">
+                    <!-- Column 1: Feature Importances -->
+                    <div class="card sandbox-col-chart">
+                        <div class="card-header">
+                            <h2>Model Feature Contributions</h2>
+                            <p class="card-desc">Relative mathematical weights of features within the classification pipeline.</p>
+                        </div>
+                        <div class="chart-container-large">
+                            <canvas id="chart-importance"></canvas>
+                        </div>
+                        <div class="model-info-block">
+                            <h3>🧠 Model Specifications</h3>
+                            <div class="info-row"><span>Algorithm Engine:</span><strong>Random Forest Classifier</strong></div>
+                            <div class="info-row"><span>Estimators count:</span><strong>100 Trees</strong></div>
+                            <div class="info-row"><span>Criterion:</span><strong>Gini Impurity</strong></div>
+                            <div class="info-row"><span>Input Vectors:</span><strong>11 Features</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Sandbox Simulator -->
+                    <div class="card sandbox-col-sim">
+                        <div class="card-header">
+                            <h2>What-If Sandbox Simulator</h2>
+                            <p class="card-desc">Simulate profile variations in real-time. Sliders recalculate values immediately.</p>
+                        </div>
+                        
+                        <div class="sandbox-controls">
+                            <!-- Slider: Age -->
+                            <div class="sandbox-group">
+                                <div class="sandbox-label-row">
+                                    <label for="sim-age">Age (Years)</label>
+                                    <span class="sim-val" id="sim-age-lbl">35</span>
+                                </div>
+                                <input type="range" id="sim-age" min="18" max="100" value="35" class="slider" oninput="runSandboxSimulation()">
+                            </div>
+
+                            <!-- Slider: Balance -->
+                            <div class="sandbox-group">
+                                <div class="sandbox-label-row">
+                                    <label for="sim-balance">Account Balance</label>
+                                    <span class="sim-val" id="sim-balance-lbl">$50,000</span>
+                                </div>
+                                <input type="range" id="sim-balance" min="0" max="250000" value="50000" step="5000" class="slider" oninput="runSandboxSimulation()">
+                            </div>
+
+                            <!-- Slider: Products -->
+                            <div class="sandbox-group">
+                                <div class="sandbox-label-row">
+                                    <label for="sim-products">Number of Products</label>
+                                    <span class="sim-val" id="sim-products-lbl">1</span>
+                                </div>
+                                <input type="range" id="sim-products" min="1" max="4" value="1" class="slider" oninput="runSandboxSimulation()">
+                            </div>
+
+                            <!-- Toggle: Active Status -->
+                            <div class="sandbox-group">
+                                <label>Member Activity Status</label>
+                                <div class="radio-toggle-group">
+                                    <input type="radio" id="sim-active-no" name="sim-active" value="0" onchange="runSandboxSimulation()">
+                                    <label for="sim-active-no">Inactive Member</label>
+                                    
+                                    <input type="radio" id="sim-active-yes" name="sim-active" value="1" checked onchange="runSandboxSimulation()">
+                                    <label for="sim-active-yes">Active Member</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Real-time Churn Result Display -->
+                        <div class="sim-display-box">
+                            <span class="sim-display-title">Simulated Exit Risk Probability</span>
+                            <div class="sim-display-value-row">
+                                <span class="sim-display-value" id="sim-risk-percent">15.0%</span>
+                                <span class="sim-display-badge" id="sim-risk-badge">Low Risk</span>
+                            </div>
+                            <div class="sim-progress-bar-bg">
+                                <div class="sim-progress-bar-fill" id="sim-progress-bar" style="width: 15%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>ChurnPredict Enterprise • Designed for Retention Teams • API Engine v2.0</p>
+        </footer>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
